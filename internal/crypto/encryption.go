@@ -7,12 +7,23 @@ import (
 	"encoding/base64"
 	"errors"
 	"io"
+	"os"
 )
 
-// Encrypt chiffre un texte avec AES-GCM
-func Encrypt(data, key string) (string, error) {
+// getEncryptionKey récupère la clé de chiffrement depuis les variables d'environnement
+func getEncryptionKey() (string, error) {
+	key := os.Getenv("ENCRYPTION_KEY")
 	if len(key) != 32 {
-		return "", errors.New("clé de chiffrement invalide : doit être de 32 caractères")
+		return "", errors.New("clé de chiffrement invalide ou non définie (doit être de 32 caractères)")
+	}
+	return key, nil
+}
+
+// Encrypt chiffre un texte avec AES-GCM en utilisant la clé stockée dans l'environnement
+func Encrypt(data string) (string, error) {
+	key, err := getEncryptionKey()
+	if err != nil {
+		return "", err
 	}
 
 	block, err := aes.NewCipher([]byte(key))
@@ -34,15 +45,16 @@ func Encrypt(data, key string) (string, error) {
 	return base64.StdEncoding.EncodeToString(cipherText), nil
 }
 
-// Decrypt déchiffre un texte chiffré avec AES-GCM
-func Decrypt(encryptedData, key string) (string, error) {
-	data, err := base64.StdEncoding.DecodeString(encryptedData)
+// Decrypt déchiffre un texte chiffré avec AES-GCM en utilisant la clé stockée dans l'environnement
+func Decrypt(encryptedData string) (string, error) {
+	key, err := getEncryptionKey()
 	if err != nil {
 		return "", err
 	}
 
-	if len(key) != 32 {
-		return "", errors.New("clé de chiffrement invalide : doit être de 32 caractères")
+	data, err := base64.StdEncoding.DecodeString(encryptedData)
+	if err != nil {
+		return "", errors.New("données chiffrées invalides")
 	}
 
 	block, err := aes.NewCipher([]byte(key))
@@ -56,7 +68,7 @@ func Decrypt(encryptedData, key string) (string, error) {
 	}
 
 	if len(data) < aesGCM.NonceSize() {
-		return "", errors.New("données invalides")
+		return "", errors.New("données invalides ou corrompues")
 	}
 
 	nonce := data[:aesGCM.NonceSize()]
@@ -64,7 +76,7 @@ func Decrypt(encryptedData, key string) (string, error) {
 
 	plainText, err := aesGCM.Open(nil, nonce, cipherText, nil)
 	if err != nil {
-		return "", err
+		return "", errors.New("échec du déchiffrement")
 	}
 
 	return string(plainText), nil

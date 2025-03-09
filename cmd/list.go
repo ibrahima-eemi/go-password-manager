@@ -7,6 +7,7 @@ import (
 	"go-password-manager/internal/storage"
 	"os"
 	"strings"
+
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 )
@@ -79,8 +80,14 @@ var listCmd = &cobra.Command{
 		choice = strings.TrimSpace(choice)
 
 		if choice == "o" {
+			encryptionKey := os.Getenv("ENCRYPTION_KEY")
+			if len(encryptionKey) != 32 {
+				fmt.Println("Erreur : Clé de chiffrement invalide ou non définie")
+				return
+			}
+
 			for _, p := range passwords {
-				decryptedPassword, err := crypto.Decrypt(p.Password, "super-secret-key")
+				decryptedPassword, err := crypto.Decrypt(p.Password)
 				if err != nil {
 					fmt.Printf("[%d] %s - %s - Erreur de déchiffrement\n", p.ID, p.Site, p.Username)
 				} else {

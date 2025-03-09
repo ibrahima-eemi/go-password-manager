@@ -40,6 +40,10 @@ func handleGetPassword(w http.ResponseWriter, r *http.Request) {
 
 	// Vérifier l'authentification via un token
 	expectedToken := os.Getenv("API_TOKEN")
+	if expectedToken == "" {
+		http.Error(w, "Erreur serveur : API_TOKEN non défini", http.StatusInternalServerError)
+		return
+	}
 	if creds.Auth != expectedToken {
 		http.Error(w, "Authentification refusée", http.StatusUnauthorized)
 		return
@@ -50,12 +54,16 @@ func handleGetPassword(w http.ResponseWriter, r *http.Request) {
 	var username, encryptedPassword string
 	err = row.Scan(&username, &encryptedPassword)
 	if err != nil {
-		http.Error(w, "Site non trouvé", http.StatusNotFound)
+		if err == sql.ErrNoRows {
+			http.Error(w, "Site non trouvé", http.StatusNotFound)
+		} else {
+			http.Error(w, "Erreur lors de la récupération des données", http.StatusInternalServerError)
+		}
 		return
 	}
 
 	// Déchiffrer le mot de passe
-	decryptedPassword, err := crypto.Decrypt(encryptedPassword, "super-secret-key")
+	decryptedPassword, err := crypto.Decrypt(encryptedPassword)
 	if err != nil {
 		http.Error(w, "Erreur de déchiffrement", http.StatusInternalServerError)
 		return

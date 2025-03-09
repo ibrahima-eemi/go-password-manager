@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"go-password-manager/internal/crypto"
 	"go-password-manager/internal/storage"
-	"log"
 	"os"
 	"strings"
 
@@ -63,14 +62,8 @@ var addCmd = &cobra.Command{
 			fmt.Println("Mot de passe généré :", password)
 		}
 
-		// Récupérer la clé de chiffrement
-		encryptionKey := os.Getenv("ENCRYPTION_KEY")
-		if len(encryptionKey) != 32 {
-			log.Fatal("Erreur : ENCRYPTION_KEY doit être une clé de 32 caractères.")
-		}
-
 		// Chiffrer le mot de passe
-		encryptedPassword, err := crypto.Encrypt(password, encryptionKey)
+		encryptedPassword, err := crypto.Encrypt(password)
 		if err != nil {
 			fmt.Println("Erreur de chiffrement :", err)
 			return

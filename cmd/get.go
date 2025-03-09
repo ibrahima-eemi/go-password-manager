@@ -59,13 +59,7 @@ var getCmd = &cobra.Command{
 		}
 
 		// Déchiffrer le mot de passe
-		encryptionKey := os.Getenv("ENCRYPTION_KEY")
-		if len(encryptionKey) != 32 {
-			fmt.Println("Erreur : Clé de chiffrement invalide. Vérifiez votre .env")
-			return
-		}
-
-		decryptedPassword, err := crypto.Decrypt(encryptedPassword, encryptionKey)
+		decryptedPassword, err := crypto.Decrypt(encryptedPassword)
 		if err != nil {
 			fmt.Println("Erreur de déchiffrement :", err)
 			return
