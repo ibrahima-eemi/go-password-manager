@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Mots de Passe</title>
+    <script src="/static/htmx.min.js"></script>
+    <link rel="stylesheet" href="/static/tailwind.css">
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <nav class="p-4 bg-blue-600 text-white text-center">
+        <a href="/" class="px-4">Accueil</a>
+        <a href="/passwords" class="px-4">Mots de Passe</a>
+        <a href="/add-password" class="px-4">Ajouter</a>
+    </nav>
+    <div class="container mx-auto p-6">
+        {{ block "content" . }}{{ end }}
+    </div>
+
+<body class="bg-gray-900 text-white">
+    <div class="text-center p-10">
+        <h1 class="text-3xl font-bold text-red-500">🔥 Tailwind fonctionne !</h1>
+    </div>
+    <div class="container mx-auto p-6">
+        {{ template "content" . }}
+    </div>
+</body>
+</html>

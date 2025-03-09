@@ -1,0 +1,10 @@
+{{ define "content" }}
+<h2 class="text-xl font-bold mb-4">Mots de passe enregistrés</h2>
+<ul>
+    {{ range . }}
+    <li class="bg-white p-2 my-2 shadow-md">{{ .Site }} - {{ .Username }}</li>
+    {{ else }}
+    <p>Aucun mot de passe enregistré.</p>
+    {{ end }}
+</ul>
+{{ end }}
