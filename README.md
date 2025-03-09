@@ -1,4 +1,4 @@
-# 🔐 go-password-manager  
+# 🔐 Go Password Manager  
 
 **Un gestionnaire de mots de passe ultra sécurisé en Go avec chiffrement AES et stockage local chiffré.**  
 
@@ -12,8 +12,6 @@
 ✅ **Mode interactif (TUI)** : Interface terminal ergonomique pour une navigation simplifiée.  
 ✅ **Clés d’API sécurisées** : Fichiers `.env` générés automatiquement pour stocker les clés sensibles.  
 ✅ **Sauvegarde et restauration** : Export des mots de passe chiffrés pour les réimporter en toute sécurité.  
-
----
 
 ## 📂 **Architecture du projet**  
 
@@ -47,8 +45,6 @@ go-password-manager/
 │── passwords.db # Base de données SQLite chiffrée
 │── README.md # Documentation du projet
 ```
-
----
 
 ## 🛠️ **Installation et Configuration**  
 
@@ -111,8 +107,6 @@ go run main.go api
 
 👉 Lance un serveur sur http://localhost:8080 pour l’extension navigateur.
 
----
-
 ## 🔒 **Sécurité et Bonnes Pratiques**
 
 ✅ Chiffrement AES-GCM pour garantir la sécurité des mots de passe.  
@@ -121,15 +115,11 @@ go run main.go api
 ✅ Clé de chiffrement stockée uniquement dans .env et jamais hardcodée.  
 ✅ Timeout automatique en cas d’inactivité pour éviter les accès non autorisés.
 
----
-
 ## 🤝 **Contribuer au projet**
 
 1. Forker le projet  
 2. Créer une branche pour une nouvelle feature  
 3. Soumettre une Pull Request (PR)  
-
----
 
 ## 📄 **Licence**
 
